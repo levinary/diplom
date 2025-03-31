@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diplom Generator</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        input[type="text"], input[type="number"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Generer Diplom</h1>
+        <label for="navn">Navn:</label><br>
+        <input type="text" id="navn" name="navn" required><br><br>
+
+        <label for="tid">Løbstid (valgfrit, f.eks. 00:45:30):</label><br>
+        <input type="text" id="tid" name="tid"><br><br>
+
+        <label for="placering">Placering (valgfrit):</label><br>
+        <input type="number" id="placering" name="placering"><br><br>
+
+        <button onclick="genererDiplom()">Generer Diplom</button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        function genererDiplom() {
+            const navn = document.getElementById('navn').value;
+            const tid = document.getElementById('tid').value;
+            const placering = document.getElementById('placering').value;
+
+            // Initialiser jsPDF
+            const doc = new jsPDF();
+
+            // Tilføj indhold til PDF'en
+            doc.setFontSize(24);
+            doc.text("Diplom for Deltagelse", 105, 30, { align: "center" });
+
+            doc.setFontSize(16);
+            doc.text(`Hermed bekræftes det, at`, 105, 60, { align: "center" });
+
+            doc.setFontSize(20);
+            doc.text(navn, 105, 80, { align: "center" });
+
+            doc.setFontSize(16);
+            doc.text(`har fuldført`, 105, 100, { align: "center" });
+
+            doc.setFontSize(18);
+            doc.text("10 km Løb", 105, 120, { align: "center" });
+
+            if (tid) {
+                doc.setFontSize(16);
+                doc.text(`Løbstid: ${tid}`, 105, 140, { align: "center" });
+            }
+
+            if (placering) {
+                doc.setFontSize(16);
+                doc.text(`Placering: ${placering}.`, 105, 160, { align: "center" });
+            }
+
+            doc.setFontSize(16);
+            doc.text("Vi lykønsker med din præstation!", 105, 180, { align: "center" });
+
+            // Gem eller åbn PDF'en
+            doc.save(`diplom_${navn.replace(/\s+/g, '_').toLowerCase()}.pdf`);
+            // Alternativt for at åbne i nyt vindue:
+            // doc.output('dataurlnewwindow');
+        }
+    </script>
+</body>
+</html>
